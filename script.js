@@ -67,3 +67,30 @@ function handleClick(card){
 
 
 }
+function resetTurn(){
+    first=null;
+    second=null;
+    lock=false;
+}
+function startGame(){
+    if (started) return;
+    started=true;
+    message.innerHTML="";
+    timerInterval=setInterval(()=>{
+        time++;
+        timeEl.innerText=time;
+    },1000);
+}
+
+function resetGame(){
+    clearInterval(timerInterval);
+    started=false;
+    time=0;
+    move=0;
+    timeEl.innerText=0;
+    movesEl.innerText=0;
+    message.innerText="";
+    first=second=null;
+    lock=false;
+    createBoard();
+}
