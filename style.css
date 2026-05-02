@@ -68,3 +68,17 @@ button{
     font-size: 30px;
     backface-visibility: hidden;
 }
+.front{
+    background: #f8fafc;
+    color: black;
+    transform: rotateY('180deg');
+}
+
+.card.matched .inner{
+    transform: rotateY('180deg');
+}
+
+.card.matched .back{
+    background: #22c55e;
+    color:white;
+}
