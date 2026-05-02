@@ -19,3 +19,24 @@ button{
     cursor: pointer;
     font-size: 16px;
 }
+
+#startBtn{
+    background: #22c55e;
+    color: white;
+}
+#resetBtn{
+    background: #ef4444;
+    color: white;
+}
+
+.stats{
+    margin: 10px;
+    font-size: 18px;
+}
+.game{
+    display: grid;
+    grid-template-columns: repeat(4,90);
+    gap: 12px;
+    justify-content: center;
+    margin-top: 20px;
+}
