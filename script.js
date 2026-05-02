@@ -1,96 +1,113 @@
-const emojis =["🍎","🍌","🍇","🍉","🍓","🍒","🥝","🍍"];
-let cardsArray=[...emojis,...emojis];
+const emojis = ["🍎","🍌","🍇","🍉","🍓","🍒","🥝","🍍"];
+let cardsArray = [...emojis, ...emojis];
 
 let first = null;
 let second = null;
 let lock = false;
-let move =0;
-let time=0;
-let timerInterval=null;
+let moves = 0;
+let time = 0;
+let timerInterval = null;
 let started = false;
 
-const game=document.getElementById("game");
+const game = document.getElementById("game");
 const timeEl = document.getElementById("time");
-const moveEl=document.getElementById("moves");
-const message=document.getElementById("message");
+const movesEl = document.getElementById("moves");
+const message = document.getElementById("message");
 
-function shuffle(array){
-    return array.sort(()=>Math.random() - 0.5);
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
 }
 
-function createBoard(){
-    game.innerHTML="";
-    let shuffled=shuffle(cardsArray);
+function createBoard() {
+  game.innerHTML = "";
+  let shuffled = shuffle(cardsArray);
 
-    shuffled.forEach(symbol =>{
-        const card=document.createElement("div");
-        card.classList.add("card");
+  shuffled.forEach(symbol => {
+    const card = document.createElement("div");
+    card.classList.add("card");
 
-        card.innerHTML=`
-        <div class="inner">
-            <div class="front">?</div>
-            <div class="back">${symbol}</div>
-        </div>
-        `;
+    card.innerHTML = `
+      <div class="inner">
+        <div class="front">?</div>
+        <div class="back">${symbol}</div>
+      </div>
+    `;
 
-        card.dataset.symbol=symbol;
-        card.addEventListener("click",()=>handleClick(card));
-        game.appendChild(card);
-    });
+    card.dataset.symbol = symbol;
 
+    card.addEventListener("click", () => handleClick(card));
+
+    game.appendChild(card);
+  });
 }
 
-function handleClick(card){
-    if(!started || lock|| card.classList.contains("flipped")|| card.classList.contains("matched"))
-        return;
-    if (!first){
-        first=card;
-    }else{
-        second=card;
-        lock=true;
-        moves++;
-        movesEl.innerHTML=moves;
+function handleClick(card) {
+  if (!started || lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
 
-        if(first.dataset.symbol===second.dataset.symbol){
-            first.classList.add("matched");
-            second.classList.add("matched");
-            resetTurn();
-            checkWin();
-        }else{
-            setTimeout(()=>{
-                first.classList.remove("flipped");
-                second.classList.remove("flipped");
-                resetTurn();
-            } ,800);
-        }
+  card.classList.add("flipped");
+
+  if (!first) {
+    first = card;
+  } else {
+    second = card;
+    lock = true;
+    moves++;
+    movesEl.innerText = moves;
+
+    if (first.dataset.symbol === second.dataset.symbol) {
+      first.classList.add("matched");
+      second.classList.add("matched");
+      resetTurn();
+      checkWin();
+    } else {
+      setTimeout(() => {
+        first.classList.remove("flipped");
+        second.classList.remove("flipped");
+        resetTurn();
+      }, 800);
     }
-
-
-}
-function resetTurn(){
-    first=null;
-    second=null;
-    lock=false;
-}
-function startGame(){
-    if (started) return;
-    started=true;
-    message.innerHTML="";
-    timerInterval=setInterval(()=>{
-        time++;
-        timeEl.innerText=time;
-    },1000);
+  }
 }
 
-function resetGame(){
+function resetTurn() {
+  first = null;
+  second = null;
+  lock = false;
+}
+
+function startGame() {
+  if (started) return;
+  started = true;
+  message.innerText = "";
+
+  timerInterval = setInterval(() => {
+    time++;
+    timeEl.innerText = time;
+  }, 1000);
+}
+
+function resetGame() {
+  clearInterval(timerInterval);
+  started = false;
+  time = 0;
+  moves = 0;
+  timeEl.innerText = 0;
+  movesEl.innerText = 0;
+  message.innerText = "";
+  first = second = null;
+  lock = false;
+  createBoard();
+}
+
+function checkWin() {
+  const allMatched = document.querySelectorAll(".matched").length;
+  if (allMatched === cardsArray.length) {
     clearInterval(timerInterval);
-    started=false;
-    time=0;
-    move=0;
-    timeEl.innerText=0;
-    movesEl.innerText=0;
-    message.innerText="";
-    first=second=null;
-    lock=false;
-    createBoard();
+    message.innerText = "🎉 You Won!";
+  }
 }
+
+document.getElementById("startBtn").onclick = startGame;
+document.getElementById("resetBtn").onclick = resetGame;
+
+createBoard();
