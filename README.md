@@ -6,7 +6,7 @@ Test your memory skills by flipping cards and matching identical pairs before th
 🚀 Live Demo
 
 🎮 Play Here:
-memory-flip-flop.vercel.app/
+https//memory-flip-flop.vercel.app/
 
 ✨ Features
 🎴 Flip card animation
